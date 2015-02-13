@@ -20,7 +20,7 @@
         %th.text-center
           = link_to printer.name, printer, {class:"has-tip tip-top radius", "aria-haspopup" => "true", title: "Lokale: 147", "data-tooltip" => "", data: {reveal_id: "show_printer", reveal_ajax: true}}
   %tbody
-    %tr
+    %tr{data: {date:@date}}
       - @printers.each do |printer|
         %td.printer
           /.current_time{style: "top: #{((Time.now.hour*60)+Time.now.min)*(25.0/60.0)}px"}
@@ -37,5 +37,10 @@
         = link_to "Ny reservation", new_printer_reservation_path(printer), data: {reveal_id: "new_reservation", reveal_ajax: true}
 
 #show_printer.tiny.reveal-modal{"data-reveal" => ""}
+  %p
+    %b ID:
+    2
+    %b Navn:
+    John
 #new_reservation.small.reveal-modal{"data-reveal" => ""}
 #show_reservation.tiny.reveal-modal{"data-reveal" => ""}

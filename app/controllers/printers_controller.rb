@@ -5,7 +5,7 @@ class PrintersController < ApplicationController
   # GET /printers.json
   def index
     # @printers = Printer.all.includes(:reservations)
-    @printers = Printer
+    @printers = Printer.all
     @date = params[:date] ||= Date.today
   end
 

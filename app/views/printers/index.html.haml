@@ -23,8 +23,6 @@
     %tr{data: {date:@date}}
       - @printers.each do |printer|
         %td.printer
-          /.current_time{style: "top: #{((Time.now.hour*60)+Time.now.min)*(25.0/60.0)}px"}
-
           = render printer.reservations.relevant(@date)
           = link_to "Ny reservation", new_printer_reservation_path(printer), data: {reveal_id: "new_reservation", reveal_ajax: true}
 
@@ -42,5 +40,17 @@
       .span.prefix Navn
     .small-6.columns
       = text_field_tag "", nil, {readonly:true, id:"name"}
-#new_reservation.small.reveal-modal{"data-reveal" => ""}
 #show_reservation.tiny.reveal-modal{"data-reveal" => ""}
+  .row.collapse
+    .small-6.columns
+      .span.prefix ID
+    .small-6.columns
+      = text_field_tag "", nil, {readonly:true, id:"id"}
+  %b Starter:
+  = text_field_tag "", nil, {readonly:true, id:"starts_at"}
+  %b Slutter:
+  = text_field_tag "", nil, {readonly:true, id:"ends_at"}
+  %br/
+  %b Varer
+  100 år
+#new_reservation.small.reveal-modal{"data-reveal" => ""}

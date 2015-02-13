@@ -50,3 +50,12 @@ $ ->
       r = new Reservation(reservation)
       r.setTop()
       r.setHeight()
+  
+  $('.printer-header').on 'click', ->
+    name = $(this).data 'name'
+    $('#show_printer').find('#name').val name
+    $('#show_printer').foundation 'reveal', 'open'
+
+  $(document).on 'opened', '#show_printer[data-reveal]', ->
+
+    $("#show_reservation").append("<a class='close-reveal-modal'>×</a>")

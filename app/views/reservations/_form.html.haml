@@ -1,0 +1,46 @@
+= form_for [@printer,@reservation] do |f|
+  - if @reservation.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@reservation.errors.count, "error")} prohibited this reservation from being saved:"
+      %ul
+        - @reservation.errors.full_messages.each do |msg|
+          %li= msg
+  
+
+  .row
+    .field.small-12.medium-6.column
+      = f.label :starts_at_date, "Dag", {class: "error"}
+      = f.date_field :starts_at_date, {class:"error"}
+      %small.error Du grim
+    .field.small-12.medium-6.column
+      = f.label :starts_at_time, "Tid", {class: "error"}
+      = f.time_field :starts_at_time, {step: 600, class:"error"}
+      %small.error Du grim
+  .row
+    .small-12.column
+      = f.label :duration, "Forventet varighed"
+      .range-slider#reservation_duration_slider{:data => {'slider' => '', 'options' => 'start: 0; end:720; step: 10;'}}
+        %span.range-slider-handle{:role => "slider", :tabindex => "0"}
+        %span.range-slider-active-segment
+        = f.hidden_field :duration
+
+  .row
+    .small-12.column
+      .row
+        .small-6.column
+          .row.collapse
+            .small-6.columns
+              %input#reservation_duration_hours{type:"number",min:-1 , max:12}
+            .small-6.columns
+              %span.postfix Timer
+        .small-6.column
+          .row.collapse
+            .small-6.columns
+              %input#reservation_duration_minutes{type:"number", min:-10, max:60, step: 10}
+            .small-6.columns
+              %span.postfix Minutter
+
+  .row
+    .small-12.column
+      .actions
+        = f.submit "Reservér", {class:"button expand"}

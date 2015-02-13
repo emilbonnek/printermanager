@@ -1,0 +1,3 @@
+.reservation.panel.radius{data: {starts_at:reservation.starts_at, ends_at:reservation.ends_at}}
+  %p
+    = link_to "Reserveret", [reservation.printer, reservation], data: {reveal_id: "show_reservation", reveal_ajax: true}

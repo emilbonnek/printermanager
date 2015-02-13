@@ -1,0 +1,7 @@
+%h1 Listing reservations
+
+- @reservations.each do |reservation|
+  %p Reservation
+  = reservation.id
+
+= link_to 'New reservations', new_printer_reservation_path(@printer), {class:"button expand"}

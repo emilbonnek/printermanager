@@ -1,0 +1,16 @@
+%p
+  %b ID
+  = @reservation.id
+  %br/
+  %b Dag:
+  = @reservation.starts_at.strftime("%d/%m")
+  %br/
+  %b Starter:
+  = @reservation.starts_at.strftime("%H:%M")
+  %b Slutter:
+  = @reservation.ends_at.strftime("%H:%M")
+  %br/
+  %b Varer
+  = "#{@reservation.duration_method/60} timer og #{@reservation.duration_method%60} minutter"
+
+/= button_to "delete", @reservation, {method: :delete, class: :destroy}

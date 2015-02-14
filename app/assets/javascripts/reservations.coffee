@@ -13,9 +13,6 @@ updateDuration = () ->
   $('#reservation_duration_hours').val(duration//60)
   $('#reservation_duration_minutes').val(duration%%60)
 $ ->
-  # Vis mere om en reservation
-  $(document).on 'opened', '#show_reservation[data-reveal]', ->
-    $("#show_reservation").append("<a class='close-reveal-modal'>×</a>")
 
   # Vis en formular til at oprette en ny reservation
   $(document).on 'opened', '#new_reservation[data-reveal]', ->

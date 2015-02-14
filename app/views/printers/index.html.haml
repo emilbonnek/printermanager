@@ -7,7 +7,9 @@
           %span.prefix= get_weekday_in_danish @date
         .small-6.columns
           = date_field_tag :date, @date
-  .medium-6.large-2.column
+  .medium-6.large-4.xlarge-3.xxlarge-2.column
+    = link_to "Ny reservation", new_printer_reservation_path(@printers.sample), {class:"button", data: {reveal_id: "new_reservation", reveal_ajax: true}}
+  .medium-6.large-2.column.hide-for-small-only
     = form_tag settings_path, method: 'post' do
       = label_tag :current_time, "Vis klokken"
       = check_box_tag :current_time, checked = cookies[:current_time], {id: "hest"}
@@ -22,7 +24,7 @@
   %tbody
     %tr{data: {date:@date}}
       - @printers.each do |printer|
-        %td.printer
+        %td
           = render printer.reservations.relevant(@date)
           = link_to "Ny reservation", new_printer_reservation_path(printer), data: {reveal_id: "new_reservation", reveal_ajax: true}
 
@@ -35,22 +37,21 @@
         = link_to "Ny reservation", new_printer_reservation_path(printer), data: {reveal_id: "new_reservation", reveal_ajax: true}
 
 #show_printer.tiny.reveal-modal{"data-reveal" => ""}
-  .row.collapse
-    .small-6.columns
-      .span.prefix Navn
-    .small-6.columns
-      = text_field_tag "", nil, {readonly:true, id:"name"}
+  %p
+    %b Navn: 
+    %span#name
+  %a.close-reveal-modal ×
 #show_reservation.tiny.reveal-modal{"data-reveal" => ""}
-  .row.collapse
-    .small-6.columns
-      .span.prefix ID
-    .small-6.columns
-      = text_field_tag "", nil, {readonly:true, id:"id"}
-  %b Starter:
-  = text_field_tag "", nil, {readonly:true, id:"starts_at"}
-  %b Slutter:
-  = text_field_tag "", nil, {readonly:true, id:"ends_at"}
-  %br/
-  %b Varer
-  100 år
+  %p
+    %b ID: 
+    %span#id
+    %br/
+    %b Klokken: 
+    %span#starts_at
+    %span -
+    %span#ends_at
+    %br/
+    %b Varer: 
+    %span#duration
+  %a.close-reveal-modal ×
 #new_reservation.small.reveal-modal{"data-reveal" => ""}

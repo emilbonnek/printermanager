@@ -12,7 +12,7 @@ formatTime = (datetime) ->
     m = '0' + m
   return t + ":" + m
 
-# Funktion der formaterer et givent antal minutter
+# Funktion der formaterer et givent antal minutter som 't timer og m minutter'
 formatMinutes = (minutes) ->
   t = minutes // 60
   m = minutes %% 60
@@ -23,7 +23,9 @@ formatMinutes = (minutes) ->
   else
     return t + " timer og " + m + " minutter"
 
+# ----- FUNKTIONER DER KAN BRUGES PÅ #
 
+# ----- FUNKTIONER DER KAN BRUGES PÅ RESERVATIONER OG NOTRESERVATIONER ----- #
 # Funktioner der henter start og slut tidspunkt for en reservation og laver dem til Javascript dato-objekter.
 $.fn.startsAt = ->
   new Date(@data("starts-at"))
@@ -68,18 +70,50 @@ $ ->
   $("#date").change ->
     $(@).parents("form").submit()
   
-  # Beregn på hvilke tider der kan indsættes "ny reservation"-skilte 
+  # ------ START ------ #
   $("tbody tr td").each (index, field) ->
+    notreservations = []
+
+    beginning_of_day = new Date
+    beginning_of_day.setUTCHours(0, 0, 0, 0)
+    end_of_day = new Date
+    end_of_day.setUTCHours(23,59,59,999)
+
     reservations = $(field).children(".reservation")
-    start = new Date
-    start.setUTCHours(0, 0, 0, 0)
-    if reservations.first().endsAt() == start or reservations.first().startedYesterday()
-      console.log "Denne her er placeret i toppen"
+    
+    if reservations.first().startsAt().getTime() == beginning_of_day.getTime() or reservations.first().startedYesterday()
+      notreservations.push $(reservations).first().endsAt()
+    else
+      notreservations.push beginning_of_day
 
+    for reservation in reservations
+      notreservations.push $(reservation).startsAt()
+      notreservations.push $(reservation).endsAt()
+    
+    # if reservations.length == 0
+    #   arr = [start, end]
+    # else
+    #   unless reservations.first().startsAt().getTime() == start.getTime() or reservations.first().startedYesterday()
+    #     arr.push start
+    #     for reservation in reservations
+    #       arr.push $(reservation).startsAt()
+    #       arr.push $(reservation).endsAt()
+    #   else
 
-  # Placer alle reservationene korrekt på siden
-  $(".reservation").each (index, reservation) ->
-    $(reservation).placeAccordingly()
+    console.log notreservations
+    for notreservation in notreservations
+      html = """ <div class='panel notreservation' data-starts-at='#{}' data-ends-at='#{}'>
+                   <small>
+                     Ikke en reservation
+                   </small>
+                 </div>
+             """
+      $(this).append(html)
+  # ------ SLUT ------ #
+
+  # Placer alle reservationene og notreservationerne korrekt på siden
+  $(".reservation, .notreservation").each (index, elem) ->
+    $(elem).placeAccordingly()
   
   # Ved klik på en printer
   $('.printer-header').on 'click', ->

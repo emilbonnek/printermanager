@@ -8,8 +8,8 @@
         .small-6.columns
           = date_field_tag :date, @date
   .medium-6.large-4.xlarge-3.xxlarge-2.column
-    = link_to "Ny reservation", new_printer_reservation_path(@printers.sample), {class:"button", data: {reveal_id: "new_reservation", reveal_ajax: true}}
-  .medium-6.large-2.column.hide-for-small-only
+    = link_to "Reservér en printer", new_printer_reservation_path(@printers.sample), {class:"button expand", style:"top:21px;", data: {reveal_id: "new_reservation", reveal_ajax: true}}
+  .medium-12.large-2.column.hide-for-small-only
     = form_tag settings_path, method: 'post' do
       = label_tag :current_time, "Vis klokken"
       = check_box_tag :current_time, checked = cookies[:current_time], {id: "hest"}

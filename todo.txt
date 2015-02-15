@@ -1,0 +1,9 @@
+RUBY
+  Bedre validering
+JS
+  Funktion der skriver ugedage ud fra Date-objekt
+  Funktion der udfylder restererende plads i tabellen med links til at reservere printer
+
+DESIGN
+  Giv knappen i toppen samme størrelse som andet
+  Mobil-design

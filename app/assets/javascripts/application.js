@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require foundation
+//= require reservations_plugin
 //= require_tree .
 
 $(function(){ $(document).foundation(); });

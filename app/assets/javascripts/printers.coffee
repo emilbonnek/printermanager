@@ -2,6 +2,10 @@
 datetimeToMinutes = (datetime) -> datetime.getUTCHours()*60+datetime.getUTCMinutes()
 minutesToPixels = (minutes) -> minutes*((500/24)/60)
 
+getWeekday = (datetime) ->
+  weekdays = ["Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"]
+  return weekdays[datetime.getUTCDay()]
+
 # Funktion der formaterer et tidspunkt som tt:mm
 formatTime = (datetime) -> 
   t = datetime.getUTCHours()
@@ -70,6 +74,10 @@ $ ->
   $("#date").change ->
     $(@).parents("form").submit()
   
+  # Skriv ugedagen på prefixet til dato-feltet
+  date = new Date($("#date").val())
+  $("#date-prefix").text getWeekday(date)
+  
   # ------ START ------ #
   $("tbody tr td").each (index, field) ->
     notreservations = []
@@ -89,6 +97,11 @@ $ ->
     for reservation in reservations
       notreservations.push $(reservation).startsAt()
       notreservations.push $(reservation).endsAt()
+
+    if reservations.last().endsAt().getTime() == end_of_day.getTime() or reservations.last().endsTomorrow()
+      notreservations.push $(reservations).last().startsAt()
+    else
+      notreservations.push end_of_day
     
     # if reservations.length == 0
     #   arr = [start, end]
@@ -133,4 +146,7 @@ $ ->
     $('#show_reservation').find('#duration').text formatMinutes(duration)
 
     $('#show_reservation').foundation 'reveal', 'open'
+
+  $('.notreservation').on 'click', ->
+    $('#new_reservation').foundation 'reveal', 'open'
 

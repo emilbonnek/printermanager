@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
-  resources :printers do
-    resources :reservations
-  end
+  resources :printers
+  resources :reservations
   root 'printers#index'
   post '/settings' => 'settings#index', as: :settings
 

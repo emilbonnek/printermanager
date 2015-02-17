@@ -3,7 +3,7 @@ class Reservation < ActiveRecord::Base
   before_validation :create_start_datetime, :create_end_datetime
   belongs_to :printer
 
-  validates_datetime :starts_at, { :on_or_after => :today }
+  validates_datetime :starts_at, { on_or_after: :today }
   validate :starts_at_ok
   validate :ends_at_ok
   

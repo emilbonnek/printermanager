@@ -1,6 +1,5 @@
 class ReservationsController < ApplicationController
   before_action :set_reservation, only: [:show, :edit, :update, :destroy]
-  before_action :set_printer
 
   # GET /printers/1/reservations
   # GET /printers/1/reservations.json
@@ -27,7 +26,7 @@ class ReservationsController < ApplicationController
   # POST /printers/1/reservations
   # POST /printers/1/reservations.json
   def create
-    @reservation = @printer.reservations.new(reservation_params)
+    @reservation = Reservation.new(reservation_params)
 
     respond_to do |format|
       if @reservation.save
@@ -77,6 +76,6 @@ class ReservationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def reservation_params
-      p = params.require(:reservation).permit(:starts_at_date, :starts_at_time, :duration)
+      p = params.require(:reservation).permit(:printer_id, :starts_at_date, :starts_at_time, :duration)
     end
 end

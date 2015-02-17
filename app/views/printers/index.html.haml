@@ -8,17 +8,19 @@
         .small-6.columns
           = date_field_tag :date, @date
   .medium-6.large-4.xlarge-3.xxlarge-2.column
-    = link_to "Reservér en printer", new_printer_reservation_path(@printers.sample), {class:"button expand", style:"top:21px;", data: {reveal_id: "new_reservation", reveal_ajax: true}}
-  .medium-12.large-2.column.hide-for-small-only
+    = link_to "Reservér en printer", "#", {class:"button expand", id:"new_reservation_button", style:"top:21px;"}
+  .medium-12.large-4.column.hide-for-small-only
     = form_tag settings_path, {method: 'post', id:"update_settings", remote: true} do
-      %fieldset
-        %legend Indstillinger
-        = label_tag :current_time, 'Vis klokken'
-        = check_box :current_time, :show, {checked: cookies[:current_time]!='0'}
-        %br/
-        = label_tag :something, 'Vis noget'
-        = check_box :something, :show, {checked: cookies[:something]!='0'}
-%hr
+      %label Indstillinger
+      .panel
+        .row
+          .small-6.column
+            = label_tag :current_time, 'Vis klokken'
+            = check_box :current_time, :show, {checked: cookies[:current_time]!='0'}
+          .small-6.column
+            = label_tag :something, 'Vis noget andet'
+            = check_box :something, :show, {checked: cookies[:something]!='0'}
+/%hr
 %table#bookings_table.hide-for-small-only
   %thead
     %tr
@@ -28,9 +30,8 @@
   %tbody
     %tr{data: {date:@date}}
       - @printers.each do |printer|
-        %td
+        %td{data: {printer_id:printer.id}}
           = render printer.reservations.relevant(@date)
-          = link_to "Ny reservation", new_printer_reservation_path(printer), data: {reveal_id: "new_reservation", reveal_ajax: true}
 
 %dl.accordion.show-for-small-only{"data-accordion" => ""}
   - @printers.each do |printer|
@@ -38,7 +39,6 @@
       = link_to printer.name, "#printer#{printer.id}"
       .content.printer{id: "printer#{printer.id}"}
         = render printer.reservations.relevant(@date)
-        = link_to "Ny reservation", new_printer_reservation_path(printer), data: {reveal_id: "new_reservation", reveal_ajax: true}
 
 #show_printer.tiny.reveal-modal{"data-reveal" => ""}
   %p
@@ -59,3 +59,5 @@
     %span#duration
   %a.close-reveal-modal ×
 #new_reservation.small.reveal-modal{"data-reveal" => ""}
+  = render 'reservations/form'
+  %a.close-reveal-modal ×

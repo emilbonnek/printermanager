@@ -6,6 +6,7 @@ class PrintersController < ApplicationController
   def index
     @printers = Printer.all
     @date = params[:date] ||= Date.today
+    @reservation = Reservation.new
   end
 
   # GET /printers/1

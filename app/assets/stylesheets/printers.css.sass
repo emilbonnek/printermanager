@@ -13,11 +13,19 @@
       padding: 0
       margin: 0
     .reservation
+      opacity: 0.8
       border-color: #b6edff
-      background: #ecfaff
+      background: #EF9696
       color: #333333
-    .notreservation
       &:hover
-        border-color: #b6edff
-        background: #ecfaff
-        color: #333333
+        opacity: 0.9
+    .notreservation
+      opacity: 0
+      &:hover
+        opacity: 0.3
+        background:
+          image: url('plus.png')
+          color: #96EFBC
+          size: contain
+          repeat: no-repeat
+          position: center

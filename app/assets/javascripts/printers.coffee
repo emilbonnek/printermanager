@@ -88,7 +88,7 @@ $ ->
   date = new Date($("#date").val())
   $("#date-prefix").text getWeekday(date)
   
-  # ------ START ------ #
+
   $("tbody tr").each () ->
     beginning_of_day = new Date($(@).data("date"))
     beginning_of_day.setUTCHours(0, 0, 0, 0)
@@ -109,30 +109,18 @@ $ ->
 
       if arr[0]<=beginning_of_day      then arr.shift() else arr.unshift(beginning_of_day)
       if arr[arr.length-1]>=end_of_day then arr.pop()   else arr.push(end_of_day)
-      
+      console.log arr
       for i in [0..arr.length-1] by 2
         html = """ <div class='panel notreservation' data-starts-at='#{arr[i].toUTCString()}' data-ends-at='#{arr[i+1].toUTCString()}'>
-                     
+                   
                    </div>
                """
         $(this).append(html) unless arr[i].getTime() == arr[i+1].getTime()
 
-  # ------ SLUT ------ #
 
   # Placer alle reservationene og notreservationerne korrekt på siden
   $(".reservation, .notreservation").each (index, elem) ->
     $(elem).placeAccordingly()
-  
-  # Ved klik på "ny reservation"-knappen
-  $("#new_reservation_button").on 'click', (event) ->
-
-    $('#new_reservation').find("#reservation_printer_id").val("")
-    $('#new_reservation').find("#reservation_starts_at_date").attr('readonly', false)
-    $('#new_reservation').find("#reservation_starts_at_time").val("")
-    $('#new_reservation').find('#reservation_duration_slider').foundation('slider', 'set_value', 6*60)
-    $('#new_reservation').find('#printer-row').show()
-
-    $('#new_reservation').foundation 'reveal', 'open'
     
   # Ved klik på en printer
   $('.printer-header').on 'click', ->
@@ -160,7 +148,7 @@ $ ->
     starts_at_date = formatDate $(@).startsAt()
     starts_at_time = formatTime $(@).startsAt()
     duration = $(@).durationInMinutes()
-    duration = 12*60 if duration > 12*60
+    duration = 6*60 if duration > 6*60
     $('#new_reservation').find("#reservation_printer_id").val(printer_id)
     $('#new_reservation').find("#reservation_starts_at_date").val(starts_at_date).attr('readonly', true)
     $('#new_reservation').find("#reservation_starts_at_time").val(starts_at_time)
@@ -169,3 +157,14 @@ $ ->
 
     $('#new_reservation').foundation 'reveal', 'open'
 
+  # Ved klik på "ny reservation"-knappen
+  $("#new_reservation_button").on 'click', ->
+
+    $('#new_reservation').find("#reservation_printer_id").val("")
+    $('#new_reservation').find("#reservation_starts_at_date").attr('readonly', false)
+    $('#new_reservation').find("#reservation_starts_at_date").val("")
+    $('#new_reservation').find("#reservation_starts_at_time").val("")
+    $('#new_reservation').find('#reservation_duration_slider').foundation('slider', 'set_value', 6*60)
+    $('#new_reservation').find('#printer-row').show()
+
+    $('#new_reservation').foundation 'reveal', 'open'

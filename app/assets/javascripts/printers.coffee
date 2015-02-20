@@ -15,7 +15,6 @@ formatDate = (datetime) ->
   if dd < 10
     dd = '0' + dd
   return yyyy + "-" + MM + "-" + dd
-
 # Funktion der formaterer et tidspunkt som tt:mm
 formatTime = (datetime) -> 
   t = datetime.getUTCHours()
@@ -25,7 +24,6 @@ formatTime = (datetime) ->
   if m < 10
     m = '0' + m
   return t + ":" + m
-
 # Funktion der formaterer et givent antal minutter som 't timer og m minutter'
 formatMinutes = (minutes) ->
   t = minutes // 60
@@ -37,7 +35,24 @@ formatMinutes = (minutes) ->
   else
     return t + " timer og " + m + " minutter"
 
+# ----- FUNKTIONER DER BRUGES I FORMULAREN TIL AT OPRETTE EN NY RESERVATION ----- #
+# Funktioner der bruges til at sætte slideren og felterne i formularen
+setDurationSlider = (hours, minutes) ->
+  duration = hours*60+minutes
+  duration = 0     if duration <= 0
+  duration = 12*60 if duration >= 12*60
+  $('#new_reservation').find("#reservation_duration_slider").foundation('slider', 'set_value', duration)
 
+setDurationFields = (duration) ->
+  $('#new_reservation').find("#reservation_duration_hours").val duration//60
+  $('#new_reservation').find("#reservation_duration_minutes").val duration%%60
+
+showOrHideCurrentTime = () ->
+  checked = $("#update_settings").find("#current_time_toggle").prop( "checked")
+  if checked
+    $(".current-time").show()
+  else
+    $(".current-time").hide()
 
 # ----- FUNKTIONER DER KAN BRUGES PÅ RESERVATIONER OG NOTRESERVATIONER ----- #
 # Funktioner der henter start og slut tidspunkt for en reservation og laver dem til Javascript dato-objekter.
@@ -80,15 +95,20 @@ $.fn.placeAccordingly = ->
   return
 
 $ ->
-  # Begynd dato-feltet
+  showOrHideCurrentTime()
+
+  # Ved ændring på dato-feltet
   $("#date").change ->
     $(@).parents("form").submit()
+
+  # Ved ændring i indstillingerne i toppen
+  $("#update_settings").find("#current_time_toggle").change ->
+    showOrHideCurrentTime()
   
   # Skriv ugedagen på prefixet til dato-feltet
   date = new Date($("#date").val())
   $("#date-prefix").text getWeekday(date)
   
-
   $("tbody tr").each () ->
     beginning_of_day = new Date($(@).data("date"))
     beginning_of_day.setUTCHours(0, 0, 0, 0)
@@ -97,12 +117,29 @@ $ ->
     end_of_day.setUTCHours(0,0,0,0)
 
     $(@).children("td").each (index, field) ->
-      
+      # Opret en linje der viser klokken
+      current_time = """
+                       <div class="current-time">
+                       </div>
+                     """
+      $(@).append current_time
+
       arr = []
       reservations = $(field).children(".reservation")
       for reservation in reservations
+        id = $(reservation).data 'id'
+        duration = $(reservation).durationInMinutes()
         starts_at = $(reservation).startsAt()
-        ends_at = $(reservation).endsAt()     
+        ends_at = $(reservation).endsAt()
+
+        # Sæt tooltip for den enkelte reservation
+        tooltip = """
+                    ID: #{id} <br/>
+                    Klokken: #{formatTime(starts_at)} - #{formatTime(ends_at)} <br/>
+                    Varer: #{formatMinutes(duration)} <br/>
+                  """
+        $(reservation).attr("title",tooltip)
+
         arr.push starts_at, ends_at
       
       arr = arr.sort()
@@ -121,7 +158,13 @@ $ ->
   # Placer alle reservationene og notreservationerne korrekt på siden
   $(".reservation, .notreservation").each (index, elem) ->
     $(elem).placeAccordingly()
-    
+  
+  # Placer current-time linjen korrekt
+  now = new Date()
+  now.setUTCHours(now.getUTCHours()+1)
+  mins_from_top = datetimeToMinutes(now)
+  $(".current-time").css 'top', minutesToPixels(mins_from_top)
+
   # Ved klik på en printer
   $('.printer-header').on 'click', ->
     name = $(@).data 'name'
@@ -148,11 +191,12 @@ $ ->
     starts_at_date = formatDate $(@).startsAt()
     starts_at_time = formatTime $(@).startsAt()
     duration = $(@).durationInMinutes()
-    duration = 6*60 if duration > 6*60
+    duration = 4*60 if duration > 4*60
     $('#new_reservation').find("#reservation_printer_id").val(printer_id)
     $('#new_reservation').find("#reservation_starts_at_date").val(starts_at_date).attr('readonly', true)
     $('#new_reservation').find("#reservation_starts_at_time").val(starts_at_time)
-    $('#new_reservation').find('#reservation_duration_slider').foundation('slider', 'set_value', duration)
+    setDurationSlider(duration//60,duration%%60)
+    setDurationFields(duration)
     $('#new_reservation').find('#printer-row').hide()
 
     $('#new_reservation').foundation 'reveal', 'open'
@@ -164,7 +208,24 @@ $ ->
     $('#new_reservation').find("#reservation_starts_at_date").attr('readonly', false)
     $('#new_reservation').find("#reservation_starts_at_date").val("")
     $('#new_reservation').find("#reservation_starts_at_time").val("")
-    $('#new_reservation').find('#reservation_duration_slider').foundation('slider', 'set_value', 6*60)
+    setDurationSlider(4,0)
+    setDurationFields(4*60)
     $('#new_reservation').find('#printer-row').show()
 
     $('#new_reservation').foundation 'reveal', 'open'
+  
+  # Ved ændringer på mulighederne i  "ny reservation" formularen
+  $('#new_reservation').find('#reservation_duration_hours').on 'change', ->
+      hours = parseInt $("#reservation_duration_hours").val()
+      minutes = parseInt $("#reservation_duration_minutes").val()
+      setDurationSlider hours, minutes
+
+  $('#new_reservation').find('#reservation_duration_minutes').on 'change', ->
+    hours = parseInt $("#reservation_duration_hours").val()
+    minutes = parseInt $("#reservation_duration_minutes").val()
+    setDurationSlider hours, minutes
+
+    # Slideren i formularen ændres
+  $('#new_reservation').find("#reservation_duration_slider").on "change", ->
+    duration = parseInt $(@).attr('data-slider')
+    setDurationFields duration

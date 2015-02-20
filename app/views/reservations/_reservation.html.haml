@@ -1,3 +1,2 @@
-.reservation.panel{data: {id: reservation.id ,starts_at:reservation.starts_at, ends_at:reservation.ends_at}}
-  %p
-    /= link_to "Reserveret", [reservation.printer, reservation], data: {reveal_id: "show_reservation", reveal_ajax: true}
+/.reservation.panel{data: {id: reservation.id ,starts_at:reservation.starts_at, ends_at:reservation.ends_at}}
+.reservation.panel.has-tip.tip-top.radius{"aria-haspopup" => "true", data: {tooltip:"",id: reservation.id ,starts_at:reservation.starts_at, ends_at:reservation.ends_at}, title: "ID: 1<br/>Klokken: 08:00 - 12:00<br/>Varer: 5 timer"}

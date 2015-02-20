@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resources :printers
   resources :reservations
   root 'printers#index'
-  post '/settings' => 'settings#index', as: :settings
+  put '/settings' => 'settings#update', as: :update_settings
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

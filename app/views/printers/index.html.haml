@@ -10,16 +10,16 @@
   .medium-6.large-4.xlarge-3.xxlarge-2.column
     = link_to "Reservér en printer", "#", {class:"button expand", id:"new_reservation_button", style:"top:21px;"}
   .medium-12.large-4.column.hide-for-small-only
-    = form_tag settings_path, {method: 'post', id:"update_settings", remote: true} do
+    = form_tag update_settings_path, {id:"update_settings", method: :put, remote: true} do
       %label Indstillinger
       .panel
         .row
           .small-6.column
             = label_tag :current_time, 'Vis klokken'
-            = check_box :current_time, :show, {checked: cookies[:current_time]!='0'}
+            = check_box :current_time, :toggle, {checked: cookies[:current_time]!='0'}
           .small-6.column
             = label_tag :something, 'Vis noget andet'
-            = check_box :something, :show, {checked: cookies[:something]!='0'}
+            = check_box :something, :toggle, {checked: cookies[:something]!='0'}
 /%hr
 %table#bookings_table.hide-for-small-only
   %thead

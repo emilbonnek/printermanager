@@ -9,4 +9,7 @@ class User < ActiveRecord::Base
   def separate_name
     self.first_name, self.last_name = self.full_name.titleize.match(/(\w+|\w+\-\w+)\ (.+$)/).captures
   end
+  def format_name
+    "#{self.first_name} #{self.last_name}"
+  end
 end

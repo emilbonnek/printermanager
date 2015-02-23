@@ -33,13 +33,6 @@
         %td{data: {printer_id:printer.id}}
           = render printer.reservations.relevant(@date)
 
-%dl.accordion.show-for-small-only{"data-accordion" => ""}
-  - @printers.each do |printer|
-    %dd.accordion-navigation
-      = link_to printer.name, "#printer#{printer.id}"
-      .content.printer{id: "printer#{printer.id}"}
-        = render printer.reservations.relevant(@date)
-
 #show_printer.tiny.reveal-modal{"data-reveal" => ""}
   %p
     %b Navn: 
@@ -93,31 +86,29 @@
         = f.submit 'Opret Bruger', {class:"button expand"}
 
   %a.close-reveal-modal ×
-
 #new_session.small.reveal-modal.remove-whitespace{"data-reveal" => ""}
   .row
     .large-6.columns.auth-plain
       .signup-panel.left-solid
         %p.welcome Registrerede brugere
-        %form
+        = form_tag sessions_path do
           .row.collapse
             .small-2.columns
               %span.prefix
                 %i.fi-torso
             .small-10.columns
-              %input{:placeholder => "Username", :type => "text"}
+              = text_field_tag :email, params[:email], {placeholder: "E-mail"}
           .row.collapse
             .small-2.columns
               %span.prefix
                 %i.fi-lock
             .small-10.columns
-              %input{:placeholder => "Password", :type => "text"}
-        %a.button.expand{:href => "#"} Log In
+              = password_field_tag :password, nil,{placeholder:"Adgangskode"}
+          = submit_tag "Log Ind", {class:"button expand"}
         %a.button.expand.hide-for-large-up{"data-reveal-id" => "new_user", :href => "#"} Opret Bruger
     .large-6.columns.auth-plain.show-for-large-up
       .signup-panel.newusers
         %p.welcome Ny bruger?
-        %p Du skal være oprettet som bruger og logget for at kunne reservere gymnasiets 3D printere.
-        %br
-          %a.button.expand{"data-reveal-id" => "new_user", :href => "#"} Opret Bruger
+        %p{style:"height:132px;margin:0;"} Du skal være oprettet som bruger for at kunne fortsætte og reservere gymnasiets 3D printere.
+        %a.button.expand{"data-reveal-id" => "new_user", :href => "#"} Opret Bruger
   %a.close-reveal-modal ×

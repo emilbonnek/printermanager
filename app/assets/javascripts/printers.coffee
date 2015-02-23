@@ -232,3 +232,7 @@ $ ->
   $('#new_reservation').find("#reservation_duration_slider").on "change", ->
     duration = parseInt $(@).attr('data-slider')
     setDurationFields duration
+  
+  $('#log-in-button').on 'click', ->
+    $('#new_session').foundation 'reveal', 'open'
+

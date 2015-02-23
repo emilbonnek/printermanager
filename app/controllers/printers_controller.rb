@@ -7,6 +7,7 @@ class PrintersController < ApplicationController
     @printers = Printer.all
     @date = params[:date] ||= Date.today
     @reservation = Reservation.new
+    @user = User.new
   end
 
   # GET /printers/1

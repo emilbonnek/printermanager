@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
-  attr_accessor :full_name, :password
+  attr_accessor :full_name
+  has_secure_password
   before_validation :separate_name
   
   validates :email, {uniqueness: true}

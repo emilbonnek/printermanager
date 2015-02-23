@@ -6,6 +6,7 @@ getWeekday = (datetime) ->
   weekdays = ["Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"]
   return weekdays[datetime.getUTCDay()]
 
+# Funktion der formaterer et tidsounkt som YYYY:MM:dd
 formatDate = (datetime) ->
   yyyy = datetime.getUTCFullYear()
   MM = datetime.getUTCMonth() + 1
@@ -15,25 +16,26 @@ formatDate = (datetime) ->
   if dd < 10
     dd = '0' + dd
   return yyyy + "-" + MM + "-" + dd
+
 # Funktion der formaterer et tidspunkt som tt:mm
 formatTime = (datetime) -> 
-  t = datetime.getUTCHours()
-  m = datetime.getUTCMinutes()
-  if t < 10
-    t = '0' + t
-  if m < 10
-    m = '0' + m
-  return t + ":" + m
-# Funktion der formaterer et givent antal minutter som 't timer og m minutter'
+  hh = datetime.getUTCHours()
+  mm = datetime.getUTCMinutes()
+  if hh < 10
+    hh = '0' + hh
+  if mm < 10
+    mm = '0' + mm
+  return hh + ":" + mm
+# Funktion der formaterer et givent antal minutter som 'hh timer og mm minutter'
 formatMinutes = (minutes) ->
-  t = minutes // 60
-  m = minutes %% 60
-  if t==0
-    return m + " minutter"
-  else if m==0
-    return t + " timer"
+  hh = minutes // 60
+  mm = minutes %% 60
+  if hh==0
+    return mm + " minutter"
+  else if mm==0
+    return hh + " timer"
   else
-    return t + " timer og " + m + " minutter"
+    return hh + " timer og " + mm + " minutter"
 
 # ----- FUNKTIONER DER BRUGES I FORMULAREN TIL AT OPRETTE EN NY RESERVATION ----- #
 # Funktioner der bruges til at sætte slideren og felterne i formularen
@@ -95,7 +97,6 @@ $.fn.placeAccordingly = ->
   return
 
 $ ->
-  showOrHideCurrentTime()
 
   # Ved ændring på dato-feltet
   $("#date").change ->
@@ -164,6 +165,8 @@ $ ->
   now.setUTCHours(now.getUTCHours()+1)
   mins_from_top = datetimeToMinutes(now)
   $(".current-time").css 'top', minutesToPixels(mins_from_top)
+  # Skjul eller vis current-time linjerne 
+  showOrHideCurrentTime()
 
   # Ved klik på en printer
   $('.printer-header').on 'click', ->
@@ -203,10 +206,10 @@ $ ->
 
   # Ved klik på "ny reservation"-knappen
   $("#new_reservation_button").on 'click', ->
-
+    starts_at_date = formatDate(new Date($("#date").val()))
     $('#new_reservation').find("#reservation_printer_id").val("")
     $('#new_reservation').find("#reservation_starts_at_date").attr('readonly', false)
-    $('#new_reservation').find("#reservation_starts_at_date").val("")
+    $('#new_reservation').find("#reservation_starts_at_date").val(starts_at_date)
     $('#new_reservation').find("#reservation_starts_at_time").val("")
     setDurationSlider(4,0)
     setDurationFields(4*60)

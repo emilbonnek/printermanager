@@ -6,6 +6,7 @@ class Reservation < ActiveRecord::Base
   validates_datetime :starts_at, { on_or_after: :today }
   validate :starts_at_ok
   validate :ends_at_ok
+  validate :ends_at_later_than_starts_at
   
   def create_start_datetime
     date = Date.parse self.starts_at_date
@@ -42,7 +43,7 @@ class Reservation < ActiveRecord::Base
       '(starts_at < ? AND ends_at > ?)',
       starts_at, starts_at
     ).empty?
-      errors.add(:starts_at, 'Denne tid starer oven i en anden reservation af samme printer')
+      errors.add(:starts_at, 'Denne tid starter oven i en anden reservation af samme printer')
     end
   end
   def ends_at_ok
@@ -51,6 +52,13 @@ class Reservation < ActiveRecord::Base
       starts_at, ends_at
     ).empty?
       errors.add(:ends_at, 'Denne tid slutter oven i en anden reservation af samme printer')
+    end
+  end
+  def ends_at_later_than_starts_at
+    if starts_at == ends_at
+      errors.add(:ends_at, 'Denne tid starter og slutter på samme tid')
+    elsif starts_at > ends_at 
+      errors.add(:ends_at, 'Denne tid slutter før den starter, du har vist pillet ved noget')
     end
   end
 end

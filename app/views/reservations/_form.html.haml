@@ -12,7 +12,7 @@
       = f.collection_select(:printer_id, Printer.all, :id, :name)
   .row
     .field.small-12.medium-6.column
-      = f.label :starts_at_date, "Dag"
+      = f.label :starts_at_date, "Dato"
       = f.date_field :starts_at_date
     .field.small-12.medium-6.column
       = f.label :starts_at_time, "Tid"

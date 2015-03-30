@@ -147,7 +147,7 @@ $ ->
 
       if arr[0]<=beginning_of_day      then arr.shift() else arr.unshift(beginning_of_day)
       if arr[arr.length-1]>=end_of_day then arr.pop()   else arr.push(end_of_day)
-      console.log arr
+
       for i in [0..arr.length-1] by 2
         html = """ <div class='panel notreservation' data-starts-at='#{arr[i].toUTCString()}' data-ends-at='#{arr[i+1].toUTCString()}'>
                    
@@ -196,26 +196,25 @@ $ ->
     duration = $(@).durationInMinutes()
     duration = 4*60 if duration > 4*60
     $('#new_reservation').find("#reservation_printer_id").val(printer_id)
-    $('#new_reservation').find("#reservation_starts_at_date").val(starts_at_date).attr('readonly', true)
+    $('#new_reservation').find("#reservation_starts_at_date").val(starts_at_date)
     $('#new_reservation').find("#reservation_starts_at_time").val(starts_at_time)
     setDurationSlider(duration//60,duration%%60)
     setDurationFields(duration)
     $('#new_reservation').find('#printer-row').hide()
 
-    $('#new_reservation').foundation 'reveal', 'open'
+    $('#show_this').foundation 'reveal', 'open'
 
   # Ved klik på "ny reservation"-knappen
   $("#new_reservation_button").on 'click', ->
     starts_at_date = formatDate(new Date($("#date").val()))
     $('#new_reservation').find("#reservation_printer_id").val("")
-    $('#new_reservation').find("#reservation_starts_at_date").attr('readonly', false)
     $('#new_reservation').find("#reservation_starts_at_date").val(starts_at_date)
     $('#new_reservation').find("#reservation_starts_at_time").val("")
     setDurationSlider(4,0)
     setDurationFields(4*60)
     $('#new_reservation').find('#printer-row').show()
 
-    $('#new_reservation').foundation 'reveal', 'open'
+    $('#show_this').foundation 'reveal', 'open'
   
   # Ved ændringer på mulighederne i  "ny reservation" formularen
   $('#new_reservation').find('#reservation_duration_hours').on 'change', ->
@@ -232,5 +231,3 @@ $ ->
   $('#new_reservation').find("#reservation_duration_slider").on "change", ->
     duration = parseInt $(@).attr('data-slider')
     setDurationFields duration
-
-#new_user

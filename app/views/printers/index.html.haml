@@ -24,11 +24,19 @@
 %table#bookings_table.hide-for-small-only
   %thead
     %tr
+      %td
       - @printers.each do |printer|
         %th.text-center.printer-header{data: {id: printer.id, name: printer.name}}
           = printer.name
   %tbody
     %tr{data: {date: @date}}
+      %th
+        %p 06:00
+        %p 08:00
+        %p 10:00
+        %p 12:00
+        %p 14:00
+        %p 16:00
       - @printers.each do |printer|
         %td{data: {printer_id: printer.id}}
           = render printer.reservations.relevant(@date)
@@ -51,13 +59,13 @@
     %b Varer: 
     %span#duration
   %a.close-reveal-modal ×
-
-#new_reservation.small.reveal-modal{"data-reveal" => ""}
-  = render 'reservations/form'
+#show_this.small.reveal-modal{"data-reveal" => ""}
+  - if signed_in?
+    = render 'reservations/form'
+  - else
+    #new_session
+      = render 'sessions/form'
   %a.close-reveal-modal ×
 #new_user.tiny.reveal-modal{"data-reveal" => ""}
   = render 'users/form'
-  %a.close-reveal-modal ×
-#new_session.small.reveal-modal.remove-whitespace{"data-reveal" => ""}
-  = render 'sessions/form'
   %a.close-reveal-modal ×

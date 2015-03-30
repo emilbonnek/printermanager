@@ -41,7 +41,7 @@ class Reservation < ActiveRecord::Base
   private
   def starts_at_ok
     unless self.printer.reservations.where(
-      '(starts_at < ? AND ends_at > ?)',
+      '(starts_at <= ? AND ends_at > ?)',
       starts_at, starts_at
     ).empty?
       errors.add(:starts_at, 'Denne tid starter oven i en anden reservation af samme printer')
@@ -49,10 +49,16 @@ class Reservation < ActiveRecord::Base
   end
   def ends_at_ok
     unless self.printer.reservations.where(
-      '(starts_at > ? AND starts_at < ?)',
-      starts_at, ends_at
+      '(starts_at < ? AND ends_at >= ?)',
+      ends_at, ends_at
     ).empty?
       errors.add(:ends_at, 'Denne tid slutter oven i en anden reservation af samme printer')
+    end
+    unless self.printer.reservations.where(
+      '(starts_at > ? AND ends_at > ?) AND (starts_at < ? AND ends_at < ?)',
+      starts_at, starts_at, ends_at, ends_at
+      ).empty?
+        errors.add(:ends_at, 'Denne tid går ind over en anden reservation af samme printer')
     end
   end
   def ends_at_later_than_starts_at

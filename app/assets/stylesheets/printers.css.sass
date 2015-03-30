@@ -1,39 +1,46 @@
 .printer-header
   cursor: pointer
 #bookings_table
-  td
-    position: relative
-    height: 500px
-    width: 200px
-    padding: 0px
-    .current-time
-      position: absolute
-      width: 100%
-      height: 2px
-      background-color: black
-    .reservation, .notreservation
-      position: absolute
-      width: 100%
-      cursor: pointer
-      padding: 0
-      margin: 0
-    .reservation
-      opacity: 0.8
-      border-color: #b6edff
-      background: #EF9696
-      color: #333333
-      &:hover
-        opacity: 0.9
-    .notreservation
-      opacity: 0
-      &:hover
-        opacity: 0.3
-        background:
-          image: url('plus.png')
-          color: #96EFBC
-          size: contain
-          repeat: no-repeat
-          position: center
+  thead
+    tr
+      td:first-of-type
+        // background-color: gray
+  tbody
+    th
+      background-color: #F5F5F5
+    td
+      position: relative
+      height: 500px
+      width: 200px
+      padding: 0px
+      .current-time
+        position: absolute
+        width: 100%
+        height: 2px
+        background-color: black
+      .reservation, .notreservation
+        position: absolute
+        width: 100%
+        cursor: pointer
+        padding: 0
+        margin: 0
+      .reservation
+        opacity: 0.8
+        border-color: #b6edff
+        background: #EF9696
+        color: #333333
+        &:hover
+          opacity: 0.9
+      .notreservation
+        opacity: 0
+        &:hover
+          opacity: 0.3
+          background:
+            image: url('plus.png')
+            color: #96EFBC
+            size: contain
+            repeat: no-repeat
+            position: center
 
 #new_session, #new_user
   h2
@@ -42,7 +49,7 @@
     font-weight: 200
     text-align: center
     margin-left: 0
-    margin-bottom: 15px
+    margin-bottom: 20px
   p
     font-size: 13px
     font-weight: 200

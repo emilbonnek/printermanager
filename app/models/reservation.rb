@@ -2,6 +2,7 @@ class Reservation < ActiveRecord::Base
   attr_accessor :starts_at_date, :starts_at_time, :duration
   before_validation :create_start_datetime, :create_end_datetime
   belongs_to :printer
+  belongs_to :user
 
   validates_datetime :starts_at, { on_or_after: :today }
   validate :starts_at_ok

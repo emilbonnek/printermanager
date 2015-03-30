@@ -1,6 +1,6 @@
 class ReservationsController < ApplicationController
   before_action :set_reservation, only: [:show, :edit, :update, :destroy]
-
+  before_action :authenticate_user, only: [:create]
   # GET /printers/1/reservations
   # GET /printers/1/reservations.json
   def index
@@ -16,7 +16,6 @@ class ReservationsController < ApplicationController
   # GET /printers/1/reservations/new
   def new
     @reservation = Reservation.new
-    render :layout => false
   end
 
   # GET /printers/1/reservations/1/edit
@@ -26,7 +25,7 @@ class ReservationsController < ApplicationController
   # POST /printers/1/reservations
   # POST /printers/1/reservations.json
   def create
-    @reservation = Reservation.new(reservation_params)
+    @reservation = current_user.reservations.build(reservation_params)
 
     respond_to do |format|
       if @reservation.save

@@ -1,19 +1,29 @@
-= form_for @user do |f|
-  - if @user.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@user.errors.count, "error")} prohibited this user from being saved:"
-      %ul
-        - @user.errors.full_messages.each do |msg|
-          %li= msg
 
-  .field
-    = f.label :first_name
-    = f.text_field :first_name
-  .field
-    = f.label :last_name
-    = f.text_field :last_name
-  .field
-    = f.label :email
-    = f.text_field :email
+%h2 Opret bruger
+= form_for @user do |f|
+  .row.collapse.field
+    .small-2.columns
+      %span.prefix
+        %i.fi-torso
+    .small-10.columns
+      = f.text_field :full_name, {placeholder: "Fulde navn"}
+  .row.collapse.field
+    .small-2.columns
+      %span.prefix
+        %i.fi-web
+    .small-10.columns
+      = f.email_field :email, {placeholder: "E-mail"}
+  .row.collapse.field
+    .small-2.columns
+      %span.prefix
+        %i.fi-lock
+    .small-10.columns
+      = f.password_field :password, {placeholder:"Adgangskode"}
+  .row.collapse.field
+    .small-2.columns
+      %span.prefix
+        %i.fi-lock
+    .small-10.columns
+      = f.password_field :password_confirmation, {placeholder:"Adgangskode igen"}
   .actions
-    = f.submit 'Save'
+    = f.submit 'Tilmeld', {class:"button expand"}

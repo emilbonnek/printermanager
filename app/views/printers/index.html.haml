@@ -28,11 +28,11 @@
         %th.text-center.printer-header{data: {id: printer.id, name: printer.name}}
           = printer.name
   %tbody
-    %tr{data: {date:@date}}
+    %tr{data: {date: @date}}
       - @printers.each do |printer|
-        %td{data: {printer_id:printer.id}}
+        %td{data: {printer_id: printer.id}}
           = render printer.reservations.relevant(@date)
-
+ 
 #show_printer.tiny.reveal-modal{"data-reveal" => ""}
   %p
     %b Navn: 
@@ -51,64 +51,13 @@
     %b Varer: 
     %span#duration
   %a.close-reveal-modal ×
+
 #new_reservation.small.reveal-modal{"data-reveal" => ""}
   = render 'reservations/form'
   %a.close-reveal-modal ×
-#new_user.small.reveal-modal{"data-reveal" => ""}
-  .signup-panel
-    %p.welcome Opret bruger
-    = form_for @user do |f|
-      .row.collapse.field
-        .small-2.columns
-          %span.prefix
-            %i.fi-torso
-        .small-10.columns
-          = f.text_field :full_name, {placeholder: "Fulde navn"}
-      .row.collapse.field
-        .small-2.columns
-          %span.prefix
-            %i.fi-web
-        .small-10.columns
-          = f.email_field :email, {placeholder: "E-mail"}
-      .row.collapse.field
-        .small-2.columns
-          %span.prefix
-            %i.fi-lock
-        .small-10.columns
-          = f.password_field :password, {placeholder:"Adgangskode"}
-      .row.collapse.field
-        .small-2.columns
-          %span.prefix
-            %i.fi-lock
-        .small-10.columns
-          = f.password_field :password_confirmation, {placeholder:"Adgangskode igen"}
-      .actions
-        = f.submit 'Opret Bruger', {class:"button expand"}
-
+#new_user.tiny.reveal-modal{"data-reveal" => ""}
+  = render 'users/form'
   %a.close-reveal-modal ×
 #new_session.small.reveal-modal.remove-whitespace{"data-reveal" => ""}
-  .row
-    .large-6.columns.auth-plain
-      .signup-panel.left-solid
-        %p.welcome Registrerede brugere
-        = form_tag sessions_path do
-          .row.collapse
-            .small-2.columns
-              %span.prefix
-                %i.fi-torso
-            .small-10.columns
-              = text_field_tag :email, params[:email], {placeholder: "E-mail"}
-          .row.collapse
-            .small-2.columns
-              %span.prefix
-                %i.fi-lock
-            .small-10.columns
-              = password_field_tag :password, nil,{placeholder:"Adgangskode"}
-          = submit_tag "Log Ind", {class:"button expand"}
-        %a.button.expand.hide-for-large-up{"data-reveal-id" => "new_user", :href => "#"} Opret Bruger
-    .large-6.columns.auth-plain.show-for-large-up
-      .signup-panel.newusers
-        %p.welcome Ny bruger?
-        %p{style:"height:132px;margin:0;"} Du skal være oprettet som bruger for at kunne fortsætte og reservere gymnasiets 3D printere.
-        %a.button.expand{"data-reveal-id" => "new_user", :href => "#"} Opret Bruger
+  = render 'sessions/form'
   %a.close-reveal-modal ×

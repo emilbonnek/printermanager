@@ -1,0 +1,29 @@
+.row
+  .large-6.columns
+    %h2.welcome
+      Registrerede brugere
+  .large-6.columns
+    %h2.welcome
+      Ny bruger?
+= form_tag sessions_path do
+  .row
+    .large-6.columns
+      .row.collapse
+        .small-2.columns
+          %span.prefix
+            %i.fi-torso
+        .small-10.columns
+          = text_field_tag :email, params[:email], {placeholder: "E-mail"}
+      .row.collapse
+        .small-2.columns
+          %span.prefix
+            %i.fi-lock
+        .small-10.columns
+          = password_field_tag :password, nil,{placeholder:"Adgangskode"}
+    .large-6.columns
+      %p Du skal være tilmeldt som bruger for at kunne fortsætte og reservere gymnasiets 3D printere.
+  .row
+    .large-6.columns
+      = submit_tag "Log Ind", {class:"button expand"}
+    .large-6.columns
+      %a.button.expand{"data-reveal-id" => "new_user", :href => "#"} Tilmeld dig

@@ -14,4 +14,7 @@ class ApplicationController < ActionController::Base
   def signed_in?
     !current_user.nil?
   end
+  def authenticate_user
+    redirect_to root_path unless signed_in?
+  end
 end

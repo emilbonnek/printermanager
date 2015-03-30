@@ -12,12 +12,10 @@
       %ul.right
         - if signed_in?
           %li.has-dropdown
-            %a{href:"#"}= current_user.format_name
+            %a{href:"#", style:"font-weight:bold;"}= current_user.format_name
             %ul.dropdown
-              %li
-                %a{href:"#"} Mine Reservationer
               %li
                 = link_to "Log out", sessions_destroy_path, :method => :delete
         - else
           %li
-            %a#log-in-button{href: "#"} Log ind
+            %a#log-in-button{href: "#", "data-reveal-id" => "new_session"} Log ind

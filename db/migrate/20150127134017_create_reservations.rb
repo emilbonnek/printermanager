@@ -6,6 +6,7 @@ class CreateReservations < ActiveRecord::Migration
 
       t.timestamps null: false
       t.references :printer
+      t.references :user
     end
   end
 end

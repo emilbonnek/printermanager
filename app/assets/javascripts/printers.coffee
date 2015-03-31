@@ -162,7 +162,7 @@ $ ->
   
   # Placer current-time linjen korrekt
   now = new Date()
-  now.setUTCHours(now.getUTCHours()+1)
+  now.setUTCHours(now.getUTCHours()+2)
   mins_from_top = datetimeToMinutes(now)
   $(".current-time").css 'top', minutesToPixels(mins_from_top)
   # Skjul eller vis current-time linjerne 

@@ -1,9 +1,9 @@
-.row
-  .small-4.small-centered.column
-    %h1 Editing printer
 
-    = render 'form'
+%h2 Rediger printer
 
-    = link_to 'Show', @printer
-    \|
-    = link_to 'Back', printers_path
+= form_for @printer do |f|
+  .field
+    = f.label :name, "Printerens navn"
+    = f.text_field :name
+  .actions
+    = f.submit 'Gem', {class:"button success expand"}

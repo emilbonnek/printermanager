@@ -18,8 +18,9 @@ ActiveRecord::Schema.define(version: 20150223084158) do
 
   create_table "printers", force: true do |t|
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.boolean  "active",     default: true
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   create_table "reservations", force: true do |t|

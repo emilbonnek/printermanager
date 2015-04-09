@@ -1,35 +1,37 @@
 .row{style: "margin-top: 10px;"}
-  .medium-6.large-4.xlarge-3.xxlarge-2.column
+  .medium-6.large-4.xlarge-3.xxlarge-2.column.small-centered
     = form_tag printers_path, method: 'get' do
       = label_tag :date, "Dato"
       .row.collapse
         .small-6.columns
-          %span.prefix#date-prefix
+          %span.prefix#date-prefix= weekday @date || Date.today
         .small-6.columns
-          = date_field_tag :date, @date
-  .medium-6.large-4.xlarge-3.xxlarge-2.column
-    = link_to "Reservér en printer", "#", {class:"button expand", id:"new_reservation_button", style:"top:21px;"}
-  .medium-12.large-4.column.hide-for-small-only
-    = form_tag update_settings_path, {id:"update_settings", method: :put, remote: true} do
-      %label Indstillinger
-      .panel
-        .row
-          .small-6.column
-            = label_tag :current_time, 'Vis klokken'
-            = check_box :current_time, :toggle, {checked: cookies[:current_time]!='0'}
-          .small-6.column
-            = label_tag :something, 'Vis noget andet'
-            = check_box :something, :toggle, {checked: cookies[:something]!='0'}
-/%hr
-%table#bookings_table.hide-for-small-only
+          = date_field_tag :date, @date || Date.today
+.row
+  .medium-6.large-4.xlarge-3.xxlarge-2.column.small-centered
+    - if signed_in? 
+      = link_to "Reserver Printer", new_reservation_path, {class:"button expand", style:"top:21px;", id: "new_reservation_button", data: {reveal_id: "new_reservation"}}
+    %hr
+%table#bookings_table
   %thead
     %tr
       %td
-      - @printers.each do |printer|
+      - @active_printers.each do |printer|
         %th.text-center.printer-header{data: {id: printer.id, name: printer.name}}
-          = printer.name
+          - if signed_in?
+            - if current_user.admin
+              = link_to printer.name, edit_printer_path(printer), {data:{reveal_id:"edit_printer", reveal_ajax:"true"}}
+            - else
+              = link_to printer.name, printer, {data:{reveal_id:"show_printer", reveal_ajax:"true"}}
+          - else
+            = printer.name
+
+      - if signed_in?
+        - if current_user.admin
+          %th.text-center.printer-header
+            = link_to "+", new_printer_path, {data: {reveal_id:"new_printer", reveal_ajax:"true"}}
   %tbody
-    %tr{data: {date: @date}}
+    %tr{data: {date: @date || Date.today}}
       %th
         %p 06:00
         %p 08:00
@@ -38,35 +40,41 @@
         %p 14:00
         %p 16:00
         %p 18:00
-      - @printers.each do |printer|
-        %td{data: {printer_id: printer.id}}
-          = render printer.reservations.relevant(@date)
+      - @active_printers.each do |printer|
+        %td{data: {printer_id: printer.id}, id:printer.id}
+          = render printer.reservations.relevant(@date || Date.today)
  
 #show_printer.tiny.reveal-modal{"data-reveal" => ""}
-  %p
-    %b Navn: 
-    %span#name
-  %a.close-reveal-modal ×
-#show_reservation.tiny.reveal-modal{"data-reveal" => ""}
-  %p
-    %b ID: 
-    %span#id
-    %br/
-    %b Klokken: 
-    %span#starts_at
-    %span -
-    %span#ends_at
-    %br/
-    %b Varer: 
-    %span#duration
-  %a.close-reveal-modal ×
-#show_this.small.reveal-modal{"data-reveal" => ""}
-  - if signed_in?
+#show_reservation.small.reveal-modal{"data-reveal" => ""}
+- unless signed_in?
+  #new_session.small.reveal-modal{"data-reveal" => ""}
+    = render 'sessions/form'
+    %a.close-reveal-modal ×
+- if signed_in?
+  #new_reservation.small.reveal-modal{"data-reveal" => ""}
     = render 'reservations/form'
-  - else
-    #new_session
-      = render 'sessions/form'
-  %a.close-reveal-modal ×
+    %a.close-reveal-modal ×
 #new_user.tiny.reveal-modal{"data-reveal" => ""}
   = render 'users/form'
+  %a.close-reveal-modal ×
+#edit_user.tiny.reveal-modal{"data-reveal" => ""}
+  %a.close-reveal-modal ×
+#new_printer.tiny.reveal-modal{"data-reveal" => ""}
+  %a.close-reveal-modal ×
+-if signed_in? and current_user.admin
+  #admin_menu.large.reveal-modal{"data-reveal" => ""}
+    %h2 Administrator menu
+    %h4 Aktive printere
+    %ul#active-printers
+      = render @active_printers
+    %h4 Inaktive printere
+    %ul#inactive-printers
+      = render @inactive_printers
+
+  #edit_reservation.small.reveal-modal{"data-reveal" => ""}
+    %a.close-reveal-modal ×
+  #edit_printer.tiny.reveal-modal{"data-reveal" => ""}
+    %a.close-reveal-modal ×
+- if signed_in?
+  #show_user.small.reveal-modal{"data-reveal" => ""}
   %a.close-reveal-modal ×

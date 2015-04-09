@@ -1,8 +1,9 @@
-= form_for @reservation, remote:true, data: {'type' => 'json'} do |f|
+%h2 Ny reservation
+= form_for @reservation, {remote:true} do |f|
   .row#printer-row
     .field.small-12.column
       = f.label :printer_id, "Printer"
-      = f.collection_select(:printer_id, Printer.all, :id, :name)
+      = f.collection_select(:printer_id, Printer.where("active = true"), :id, :name)
   .row
     .field.small-12.medium-6.column
       = f.label :starts_at_date, "Dato"
@@ -35,4 +36,4 @@
   .row
     .small-12.column
       .actions
-        = f.submit "Reservér", {class:"button expand"}
+        = f.submit "Reserver", {class:"button success expand"}

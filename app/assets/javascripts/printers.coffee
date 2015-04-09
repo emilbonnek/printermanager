@@ -96,11 +96,9 @@ $.fn.placeAccordingly = ->
   @css 'height', minutesToPixels(height_in_mins)
   return
 
+###
 $ ->
 
-  # Ved ændring på dato-feltet
-  $("#date").change ->
-    $(@).parents("form").submit()
 
   # Ved ændring i indstillingerne i toppen
   $("#update_settings").find("#current_time_toggle").change ->
@@ -203,9 +201,20 @@ $ ->
     $('#new_reservation').find('#printer-row').hide()
 
     $('#show_this').foundation 'reveal', 'open'
+###
 
+jQuery.fn.submitOnCheck = ->
+  @find("input[type=checkbox]").click ->
+    $(this).parent("form").submit()
+  @
+
+$ ->
+  # Ved ændring på dato-feltet
+  $("#date").change ->
+    $(@).parents("form").submit()
   # Ved klik på "ny reservation"-knappen
-  $("#new_reservation_button").on 'click', ->
+  $("#new_reservation_button").click (event)->
+    event.preventDefault()
     starts_at_date = formatDate(new Date($("#date").val()))
     $('#new_reservation').find("#reservation_printer_id").val("")
     $('#new_reservation').find("#reservation_starts_at_date").val(starts_at_date)
@@ -213,8 +222,6 @@ $ ->
     setDurationSlider(4,0)
     setDurationFields(4*60)
     $('#new_reservation').find('#printer-row').show()
-
-    $('#show_this').foundation 'reveal', 'open'
   
   # Ved ændringer på mulighederne i  "ny reservation" formularen
   $('#new_reservation').find('#reservation_duration_hours').on 'change', ->
@@ -231,3 +238,5 @@ $ ->
   $('#new_reservation').find("#reservation_duration_slider").on "change", ->
     duration = parseInt $(@).attr('data-slider')
     setDurationFields duration
+
+  $(".edit_printer").submitOnCheck()

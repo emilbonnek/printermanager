@@ -1,8 +1,9 @@
-.row
-  .medium-6.medium-centered.column
 
-    %h1 New printer
+%h2 Ny printer
 
-    = render 'form'
-
-    = link_to 'Back', printers_path, {class:"button expand"}
+= form_for @printer do |f|
+  .field
+    = f.label :name, "Printerens navn"
+    = f.text_field :name
+  .actions
+    = f.submit 'Opret', {class:"button success expand"}

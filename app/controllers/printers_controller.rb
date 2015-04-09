@@ -4,8 +4,10 @@ class PrintersController < ApplicationController
   # GET /printers
   # GET /printers.json
   def index
-    @printers = Printer.all
-    @date = params[:date] ||= Date.today
+    @printers = Printer.all.order('id ASC')
+    @active_printers = Printer.where("active = true").order('id ASC')
+    @inactive_printers = Printer.where("active = false").order('id ASC')
+    params[:date] ? @date = Date.parse(params[:date]) : @date = Date.today
     @reservation = Reservation.new
     @user = User.new
   end
@@ -19,10 +21,12 @@ class PrintersController < ApplicationController
   # GET /printers/new
   def new
     @printer = Printer.new
+    render :layout => false
   end
 
   # GET /printers/1/edit
   def edit
+    render :layout => false
   end
 
   # POST /printers
@@ -46,8 +50,8 @@ class PrintersController < ApplicationController
   def update
     respond_to do |format|
       if @printer.update(printer_params)
-        format.html { redirect_to @printer, notice: 'Printer was successfully updated.' }
-        format.json { render :show, status: :ok, location: @printer }
+        format.html { redirect_to root_path}
+        format.js
       else
         format.html { render :edit }
         format.json { render json: @printer.errors, status: :unprocessable_entity }
@@ -60,7 +64,7 @@ class PrintersController < ApplicationController
   def destroy
     @printer.destroy
     respond_to do |format|
-      format.html { redirect_to printers_url, notice: 'Printer was successfully destroyed.' }
+      format.html { redirect_to printers_url}
       format.json { head :no_content }
     end
   end
@@ -73,6 +77,6 @@ class PrintersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def printer_params
-      params.require(:printer).permit(:name)
+      params.require(:printer).permit(:name, :active)
     end
 end

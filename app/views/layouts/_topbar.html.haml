@@ -11,11 +11,16 @@
       %ul.left
       %ul.right
         - if signed_in?
+          - if current_user.admin
+            %li
+              %a{href:"#", data: {reveal_id:"admin_menu"}} Admin
           %li.has-dropdown
             %a{href:"#", style:"font-weight:bold;"}= current_user.format_name
             %ul.dropdown
               %li
+                = link_to "Konto", edit_user_path(current_user), {data: {reveal_id:"edit_user", reveal_ajax:"true"}}
+              %li
                 = link_to "Log out", sessions_destroy_path, :method => :delete
         - else
           %li
-            %a#log-in-button{href: "#", "data-reveal-id" => "show_this"} Log ind
+            = link_to "Log ind", new_session_path, {data: {reveal_id:"new_session"}}

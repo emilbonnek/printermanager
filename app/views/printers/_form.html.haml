@@ -1,6 +1,6 @@
 = form_for @printer do |f|
   .field
-    = f.label :name
+    = f.label :name, "Printerens navn"
     = f.text_field :name
   .actions
-    = f.submit 'Save', {class:"button expand"}
+    = f.submit 'Gem', {class:"button success expand"}

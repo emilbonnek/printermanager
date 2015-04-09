@@ -1,16 +1,16 @@
+%h2 Vis reservation
 %p
-  %b ID
-  = @reservation.id
+  %b Bruger:
+  = link_to @reservation.user.format_name, @reservation.user, {data: {reveal_id:"show_user", reveal_ajax:"true"}}
   %br/
   %b Dag:
   = @reservation.starts_at.strftime("%d/%m")
   %br/
-  %b Starter:
-  = @reservation.starts_at.strftime("%H:%M")
-  %b Slutter:
-  = @reservation.ends_at.strftime("%H:%M")
+  %b Klokken:
+  = "#{@reservation.starts_at.strftime("%H:%M")} - #{@reservation.ends_at.strftime("%H:%M")}"
   %br/
   %b Varer
-  = "#{@reservation.duration_method/60} timer og #{@reservation.duration_method%60} minutter"
-
-/= button_to "delete", @reservation, {method: :delete, class: :destroy}
+  = duration @reservation
+  
+  - if signed_in? and (@reservation.user == current_user or current_user.admin)
+    = button_to "Slet", @reservation, {method: :delete, class: "button expand alert"}

@@ -1,9 +1,5 @@
-.row
-  .small-4.small-centered.column
-    %h1 Editing reservation
 
-    = render 'form'
+%h1 Rediger reservation
 
-    = link_to 'Show', @reservation
-    \|
-    = link_to 'Back', printers_path
+= render 'form'
+= button_to "Slet", @printer, {method: :delete, class: "button expand alert"}

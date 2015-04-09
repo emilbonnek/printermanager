@@ -1,0 +1,5 @@
+%li
+  = form_for printer, remote: true do |f|
+    = f.check_box :active
+    = link_to printer.name, printer, {class:"show"}
+    = link_to '(slet)', printer, {class:"delete", method: :delete}

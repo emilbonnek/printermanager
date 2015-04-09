@@ -1,15 +1,12 @@
-%p#notice= notice
+%h2 Vis bruger
 
 %p
-  %b First name:
-  = @user.first_name
-%p
-  %b Last name:
-  = @user.last_name
-%p
+  %b Navn:
+  = @user.format_name
+  %br/
   %b Email:
   = @user.email
-
-= link_to 'Edit', edit_user_path(@user)
-\|
-= link_to 'Back', users_path
+  %br/
+  %br/
+  - if @user == current_user or current_user.admin
+    = link_to "Rediger Bruger", edit_user_path(@user), {class:"button expand",data: {reveal_id:"edit_user", reveal_ajax:"true"}}

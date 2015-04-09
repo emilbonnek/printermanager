@@ -20,20 +20,19 @@ class ReservationsController < ApplicationController
 
   # GET /printers/1/reservations/1/edit
   def edit
+    render :layout => false
   end
 
   # POST /printers/1/reservations
   # POST /printers/1/reservations.json
   def create
     @reservation = current_user.reservations.build(reservation_params)
-
     respond_to do |format|
       if @reservation.save
-        format.html { redirect_to controller: 'printers', action: 'index', date: @reservation.starts_at_date }
-        format.json { render :show, status: :created, location: @reservation }
+        format.html { redirect_to @reservation }
+        format.js
       else
         format.html { render :new }
-        format.json { render json: @reservation.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -43,7 +42,7 @@ class ReservationsController < ApplicationController
   def update
     respond_to do |format|
       if @reservation.update(reservation_params)
-        format.html { redirect_to @reservation, notice: 'Reservation was successfully updated.' }
+        format.html { redirect_to @reservation }
         format.json { render :show, status: :ok, location: @reservation }
       else
         # format.html { render :edit }
@@ -58,7 +57,7 @@ class ReservationsController < ApplicationController
   def destroy
     @reservation.destroy
     respond_to do |format|
-      format.html { redirect_to printers_url, notice: 'Reservation was successfully destroyed.' }
+      format.html { redirect_to printers_url }
       format.json { head :no_content }
     end
   end

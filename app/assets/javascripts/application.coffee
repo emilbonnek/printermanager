@@ -7,8 +7,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require foundation
-//= require formatting
 //= require_tree .
+
 
 $ ->
   $(document).foundation()

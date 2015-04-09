@@ -44,37 +44,38 @@
         %td{data: {printer_id: printer.id}, id:printer.id}
           = render printer.reservations.relevant(@date || Date.today)
  
-#show_printer.tiny.reveal-modal{"data-reveal" => ""}
-#show_reservation.small.reveal-modal{"data-reveal" => ""}
-- unless signed_in?
-  #new_session.small.reveal-modal{"data-reveal" => ""}
-    = render 'sessions/form'
-    %a.close-reveal-modal ×
 - if signed_in?
   #new_reservation.small.reveal-modal{"data-reveal" => ""}
     = render 'reservations/form'
     %a.close-reveal-modal ×
-#new_user.tiny.reveal-modal{"data-reveal" => ""}
-  = render 'users/form'
-  %a.close-reveal-modal ×
-#edit_user.tiny.reveal-modal{"data-reveal" => ""}
-  %a.close-reveal-modal ×
-#new_printer.tiny.reveal-modal{"data-reveal" => ""}
-  %a.close-reveal-modal ×
+  #show_printer.tiny.reveal-modal{"data-reveal" => ""}
+  #show_reservation.small.reveal-modal{"data-reveal" => ""}
+  #show_user.small.reveal-modal{"data-reveal" => ""}
+  #edit_user.tiny.reveal-modal{"data-reveal" => ""}
+- else
+  #new_session.small.reveal-modal{"data-reveal" => ""}
+    = render 'sessions/form'
+    %a.close-reveal-modal ×
+  #new_user.tiny.reveal-modal{"data-reveal" => ""}
+    = render 'users/form'
+    %a.close-reveal-modal ×
 -if signed_in? and current_user.admin
   #admin_menu.large.reveal-modal{"data-reveal" => ""}
     %h2 Administrator menu
-    %h4 Aktive printere
-    %ul#active-printers
-      = render @active_printers
-    %h4 Inaktive printere
-    %ul#inactive-printers
-      = render @inactive_printers
+    .row
+      .large-6.columns.right
+        %h4 Brugere
+        = form_tag users_path, :method => 'get', :id => "search_users", remote:true do
+          = search_field_tag :search, nil, {placeholder: "Søg efter brugere"}
+        %ul#search_results
+      %hr.hide-for-large-up
+      .large-6.columns.left
+        %h4 Aktive printere
+        %ul#active-printers
+          = render @active_printers
+        %h4 Inaktive printere
+        %ul#inactive-printers
+          = render @inactive_printers
 
-  #edit_reservation.small.reveal-modal{"data-reveal" => ""}
-    %a.close-reveal-modal ×
+  #new_printer.tiny.reveal-modal{"data-reveal" => ""}
   #edit_printer.tiny.reveal-modal{"data-reveal" => ""}
-    %a.close-reveal-modal ×
-- if signed_in?
-  #show_user.small.reveal-modal{"data-reveal" => ""}
-  %a.close-reveal-modal ×

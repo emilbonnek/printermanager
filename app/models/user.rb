@@ -13,4 +13,15 @@ class User < ActiveRecord::Base
   def format_name
     "#{self.first_name} #{self.last_name}"
   end
+  def self.search(search)
+    unless search.empty?
+      where(
+        'first_name ILIKE ? OR 
+        last_name ILIKE ? OR 
+        email ILIKE ?',
+        "%#{search}%", "%#{search}%", "%#{search}%")
+    else
+      none
+    end
+  end
 end
